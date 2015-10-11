@@ -1,4 +1,5 @@
 from collections import defaultdict, Counter
+from time import time
 
 
 SOLVED = '0010203040506070'
@@ -193,17 +194,16 @@ def solve(cube):
                 elif other_states.has(new_state):
                     return depth + 1 + other_states.get_value(new_state)
                 else:
-                    if other_states.max_depth >= 7:
-                        if depth >= 6:
-                            return 14
                     my_states.append(new_state, depth + 1)
 
 
 number_of_inputs = int(input())
 for i in range(0, number_of_inputs):
     inputs = [input() for j in range(0, 6)]
+    old = time()
     cube = Cube(i=inputs)
     print(solve(cube))
+    print('Time : ' + str(time() - old))
     if i + 1 != number_of_inputs:
         input()
 
