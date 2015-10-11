@@ -67,20 +67,23 @@ class Cube:
             bottom_colors.update(solved[i].colors)
         bottom_color = bottom_colors.most_common(1)[0][0]
         top_color = up[3]
+        self.blocks = []
         for block in blocks:
             block.set_orientation(top_color, bottom_color)
-        self.blocks = blocks
+            self.blocks.append([block.index, block.orientation])
 
     def __unicode__(self):
         value = ''
         for block in self.blocks:
-            value += str(block)
+            for i in block:
+                value += str(i)
         return value
 
     def __repr__(self):
         value = ''
         for block in self.blocks:
-            value += str(block)
+            for i in block:
+                value += str(i)
         return value
 
     @staticmethod
@@ -99,47 +102,51 @@ class Cube:
     def l(cube_str):
         cube = Cube.from_string(cube_str)
         cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[2], cube.blocks[6], cube.blocks[0], cube.blocks[4]
-        cube.blocks[0].rotate(2)
-        cube.blocks[2].rotate(1)
-        cube.blocks[4].rotate(1)
-        cube.blocks[6].rotate(2)
+        Cube.rotate(cube.blocks[0], 2)
+        Cube.rotate(cube.blocks[2], 1)
+        Cube.rotate(cube.blocks[4], 1)
+        Cube.rotate(cube.blocks[6], 2)
         return str(cube)
 
     @staticmethod
     def lr(cube_str):
         cube = Cube.from_string(cube_str)
         cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[4], cube.blocks[0], cube.blocks[6], cube.blocks[2]
-        cube.blocks[0].rotate(2)
-        cube.blocks[2].rotate(1)
-        cube.blocks[4].rotate(1)
-        cube.blocks[6].rotate(2)
+        Cube.rotate(cube.blocks[0], 2)
+        Cube.rotate(cube.blocks[2], 1)
+        Cube.rotate(cube.blocks[4], 1)
+        Cube.rotate(cube.blocks[6], 2)
         return str(cube)
 
     @staticmethod
     def b(cube_str):
         cube = Cube.from_string(cube_str)
         cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[4], cube.blocks[0], cube.blocks[5], cube.blocks[1]
-        cube.blocks[0].rotate(1)
-        cube.blocks[1].rotate(2)
-        cube.blocks[4].rotate(2)
-        cube.blocks[5].rotate(1)
+        Cube.rotate(cube.blocks[0], 1)
+        Cube.rotate(cube.blocks[1], 2)
+        Cube.rotate(cube.blocks[4], 2)
+        Cube.rotate(cube.blocks[5], 1)
         return str(cube)
 
     @staticmethod
     def br(cube_str):
         cube = Cube.from_string(cube_str)
         cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[1], cube.blocks[5], cube.blocks[0], cube.blocks[4]
-        cube.blocks[0].rotate(1)
-        cube.blocks[1].rotate(2)
-        cube.blocks[4].rotate(2)
-        cube.blocks[5].rotate(1)
+        Cube.rotate(cube.blocks[0], 1)
+        Cube.rotate(cube.blocks[1], 2)
+        Cube.rotate(cube.blocks[4], 2)
+        Cube.rotate(cube.blocks[5], 1)
         return str(cube)
+
+    @staticmethod
+    def rotate(block, rotation):
+        block[1] = (block[1] + rotation) % 3
 
     @classmethod
     def from_string(cls, cube_str):
         blocks = []
         for i in range(0, 8):
-            blocks.append(Block(index=int(cube_str[i * 2]), orientation=int(cube_str[i * 2 + 1])))
+            blocks.append([int(cube_str[i * 2]), int(cube_str[i * 2 + 1])])
         cube = cls(blocks=blocks)
         return cube
 
