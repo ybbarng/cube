@@ -187,13 +187,13 @@ def solve(cube):
 
 
 if __name__ == '__main__':
-    cube = Cube(i='''RO
-WO
-YR GG BO WW
-YW RR GO BB
-GY
-BY
-'''.split('\n'))
-    print(solve(cube))
+    number_of_inputs = int(input())
+    for i in range(0, number_of_inputs):
+        inputs = [input() for j in range(0, 6)]
+        print(inputs)
+        cube = Cube(i=inputs)
+        print(solve(cube))
+        if i + 1 != number_of_inputs:
+            input()
 
 
