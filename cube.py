@@ -174,35 +174,22 @@ class States:
 def solve(cube):
     solved_cube = Cube.from_string(SOLVED)
 
-    forwards = States({str(cube): ''})
-    backwards = States({str(solved_cube): ''})
+    forwards = States({str(cube): 0})
+    backwards = States({str(solved_cube): 0})
     states = ((forwards, backwards), (backwards, forwards))
     while True:
         for my_states, other_states in states:
             state, depth = my_states.get_next()
             if other_states.has(state):
-                if my_states == forwards:
-                    return depth + other_states.get_value(state)
-                else:
-                    return other_states.get_value(state) + depth
+                return depth + other_states.get_value(state)
             for move in Cube.get_moves():
                 new_state = move(state)
-                m = move.__name__
-                if my_states == backwards:
-                    if len(m) == 2:
-                        m = m[:1]
-                    else:
-                        m = m + 'r'
-                m += ' '
                 if my_states.has(new_state):
                     continue
                 elif other_states.has(new_state):
-                    if my_states == forwards:
-                        return depth + m + other_states.get_value(new_state)
-                    else:
-                        return other_states.get_value(new_state) + m + depth
+                    return depth + 1 + other_states.get_value(new_state)
                 else:
-                    my_states.append(new_state, depth + m if my_states == forwards else m + depth)
+                    my_states.append(new_state, depth + 1)
 
 
 if __name__ == '__main__':
