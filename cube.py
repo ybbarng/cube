@@ -126,11 +126,7 @@ class Cube:
         return cube
 
     def to_tuple(self):
-        value = []
-        for block in self.blocks:
-            for i in block:
-                value.append(i)
-        return tuple(value)
+        return tuple(_ for block in self.blocks for _ in block)
 
     @staticmethod
     def get_turns():
