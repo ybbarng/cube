@@ -1,4 +1,5 @@
 from collections import defaultdict, Counter
+from time import time
 
 
 SOLVED = (0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0)
@@ -188,8 +189,10 @@ def solve(cube):
 number_of_inputs = int(input())
 for i in range(0, number_of_inputs):
     inputs = [input() for j in range(0, 6)]
+    old = time()
     cube = Cube(i=inputs)
     print(solve(cube))
+    print('T : ' + str(time() - old))
     if i + 1 != number_of_inputs:
         input()
 
