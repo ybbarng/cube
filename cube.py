@@ -1,5 +1,4 @@
 from collections import defaultdict, Counter
-from time import time
 
 
 SOLVED = (0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0)
@@ -17,20 +16,11 @@ class Block:
         self.colors = colors
         self.orientation = orientation
 
-    def __repr__(self):
-        return str(self.index) + str(self.orientation)
-
     def set_orientation(self, *base_colors):
         for i, color in enumerate(self.colors):
             if color in base_colors:
                 self.orientation = i
                 break
-
-    def rotate(self, rotation):
-        self.orientation = (self.orientation + rotation) % 3
-
-    def __unicode__(self):
-        return str(self.index) + str(self.orientation)
 
 
 class Cube:
@@ -72,35 +62,21 @@ class Cube:
             block.set_orientation(top_color, bottom_color)
             self.blocks.append([block.index, block.orientation])
 
-    def __unicode__(self):
-        value = ''
-        for block in self.blocks:
-            for i in block:
-                value += str(i)
-        return value
-
-    def __repr__(self):
-        value = ''
-        for block in self.blocks:
-            for i in block:
-                value += str(i)
-        return value
-
     @staticmethod
-    def d(cube_str):
-        cube = Cube.from_tuple(cube_str)
+    def d(cube_tuple):
+        cube = Cube.from_tuple(cube_tuple)
         cube.blocks[0:4] = cube.blocks[1], cube.blocks[3], cube.blocks[0], cube.blocks[2]
         return cube.to_tuple()
 
     @staticmethod
-    def dr(cube_str):
-        cube = Cube.from_tuple(cube_str)
+    def dr(cube_tuple):
+        cube = Cube.from_tuple(cube_tuple)
         cube.blocks[0:4] = cube.blocks[2], cube.blocks[0], cube.blocks[3], cube.blocks[1]
         return cube.to_tuple()
 
     @staticmethod
-    def l(cube_str):
-        cube = Cube.from_tuple(cube_str)
+    def l(cube_tuple):
+        cube = Cube.from_tuple(cube_tuple)
         cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[2], cube.blocks[6], cube.blocks[0], cube.blocks[4]
         Cube.rotate(cube.blocks[0], 2)
         Cube.rotate(cube.blocks[2], 1)
@@ -109,8 +85,8 @@ class Cube:
         return cube.to_tuple()
 
     @staticmethod
-    def lr(cube_str):
-        cube = Cube.from_tuple(cube_str)
+    def lr(cube_tuple):
+        cube = Cube.from_tuple(cube_tuple)
         cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[4], cube.blocks[0], cube.blocks[6], cube.blocks[2]
         Cube.rotate(cube.blocks[0], 2)
         Cube.rotate(cube.blocks[2], 1)
@@ -119,8 +95,8 @@ class Cube:
         return cube.to_tuple()
 
     @staticmethod
-    def b(cube_str):
-        cube = Cube.from_tuple(cube_str)
+    def b(cube_tuple):
+        cube = Cube.from_tuple(cube_tuple)
         cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[4], cube.blocks[0], cube.blocks[5], cube.blocks[1]
         Cube.rotate(cube.blocks[0], 1)
         Cube.rotate(cube.blocks[1], 2)
@@ -129,8 +105,8 @@ class Cube:
         return cube.to_tuple()
 
     @staticmethod
-    def br(cube_str):
-        cube = Cube.from_tuple(cube_str)
+    def br(cube_tuple):
+        cube = Cube.from_tuple(cube_tuple)
         cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[1], cube.blocks[5], cube.blocks[0], cube.blocks[4]
         Cube.rotate(cube.blocks[0], 1)
         Cube.rotate(cube.blocks[1], 2)
@@ -144,9 +120,7 @@ class Cube:
 
     @classmethod
     def from_tuple(cls, cube_list):
-        blocks = []
-        for i in range(0, 8):
-            blocks.append([cube_list[i * 2], cube_list[i * 2 + 1]])
+        blocks = [[cube_list[i * 2], cube_list[i * 2 + 1]] for i in range(0, 8)]
         cube = cls(blocks=blocks)
         return cube
 
@@ -214,10 +188,8 @@ def solve(cube):
 number_of_inputs = int(input())
 for i in range(0, number_of_inputs):
     inputs = [input() for j in range(0, 6)]
-    old = time()
     cube = Cube(i=inputs)
     print(solve(cube))
-    print('Time : ' + str(time() - old))
     if i + 1 != number_of_inputs:
         input()
 
