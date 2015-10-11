@@ -1,12 +1,25 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 
 class Block:
+    index = None
+    orientation = None
+
     def __init__(self, color_orders, *colors):
         self.index = sum(color_orders[color] for color in colors)
+        self.colors = colors
 
     def __repr__(self):
-        return str(self.index)
+        return str(self.index) + str(self.orientation)
+
+    def set_orientation(self, *base_colors):
+        for i, color in enumerate(self.colors):
+            if color in base_colors:
+                self.orientation = i
+                break
+
+    def __unicode__(self):
+        return str(self.index) + str(self.orientation)
 
 
 class Cube:
@@ -34,13 +47,19 @@ class Cube:
         self.blocks.append(Block(color_orders, up[2], left[1], front[0]))
         self.blocks.append(Block(color_orders, up[3], front[1], right[0]))
         self.solved = sorted(self.blocks, key=lambda x: x.index)
-        print(self.blocks)
+        bottom_colors = Counter()
+        for i in range(0, 4):
+            bottom_colors.update(self.solved[i].colors)
+        bottom_color = bottom_colors.most_common(1)[0][0]
+        top_color = up[3]
+        for block in self.blocks:
+            block.set_orientation(top_color, bottom_color)
 
 
 if __name__ == '__main__':
     Cube('''OO
-OO
-RR GG BB WW
+RO
+WR GG BB WO
 RR GG BB WW
 YY
 YY
