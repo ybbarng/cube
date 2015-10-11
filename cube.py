@@ -194,6 +194,9 @@ def solve(cube):
                 elif other_states.has(new_state):
                     return depth + 1 + other_states.get_value(new_state)
                 else:
+                    if other_states.max_depth >= 7:
+                        if depth >= 6:
+                            return 14
                     my_states.append(new_state, depth + 1)
 
 
