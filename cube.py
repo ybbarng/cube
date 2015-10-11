@@ -116,6 +116,14 @@ class Cube:
         self.blocks[4].rotate(2)
         self.blocks[5].rotate(1)
 
+    @classmethod
+    def from_string(cls, cube_str):
+        blocks = []
+        for i in range(0, 8):
+            blocks.append(Block(index=int(cube_str[i * 2]), orientation=int(cube_str[i * 2 + 1])))
+        cube = cls(blocks=blocks)
+        return cube
+
 
 if __name__ == '__main__':
     cube = Cube(i='''OO
@@ -127,3 +135,6 @@ YY
 '''.split('\n'))
     cube.b()
     print(cube)
+
+    solved_cube = Cube.from_string(SOLVED)
+    print(solved_cube)
