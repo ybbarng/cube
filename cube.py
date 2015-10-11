@@ -152,12 +152,14 @@ class States:
     def __init__(self, values):
         self.states = list(values.keys())
         self.states_dict = values
+        self.max_depth = 0
         self.index = 0
 
     def append(self, key, value):
         self.states.append(key)
         if key not in self.states_dict:
             self.states_dict[key] = value
+        self.max_depth = max(self.max_depth, value)
 
     def has(self, key):
         return key in self.states_dict
@@ -170,9 +172,6 @@ class States:
     def get_value(self, key):
         return self.states_dict[key]
 
-    def get_last_value(self):
-        return self.get_value(self.states[len(self.states) - 1])
-
 
 def solve(cube):
     solved_cube = Cube.from_string(SOLVED)
@@ -184,7 +183,7 @@ def solve(cube):
         for my_states, other_states in states:
             state, depth = my_states.get_next()
             if depth >= 7:
-                if other_states.get_last_value() >= 7:
+                if other_states.max_depth >= 7:
                     return 14
             if other_states.has(state):
                 return depth + other_states.get_value(state)
