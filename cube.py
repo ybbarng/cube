@@ -1,4 +1,4 @@
-from collections import defaultdict, Counter
+from collections import defaultdict, Counter, OrderedDict
 
 
 SOLVED = '0010203040506070'
@@ -82,39 +82,57 @@ class Cube:
             value += str(block)
         return value
 
-    def d(self):
-        self.blocks[0:4] = self.blocks[1], self.blocks[3], self.blocks[0], self.blocks[2]
+    @staticmethod
+    def d(cube_str):
+        cube = Cube.from_string(cube_str)
+        cube.blocks[0:4] = cube.blocks[1], cube.blocks[3], cube.blocks[0], cube.blocks[2]
+        return str(cube)
 
-    def dr(self):
-        self.blocks[0:4] = self.blocks[2], self.blocks[0], self.blocks[3], self.blocks[1]
+    @staticmethod
+    def dr(cube_str):
+        cube = Cube.from_string(cube_str)
+        cube.blocks[0:4] = cube.blocks[2], cube.blocks[0], cube.blocks[3], cube.blocks[1]
+        return str(cube)
 
-    def l(self):
-        self.blocks[0], self.blocks[2], self.blocks[4], self.blocks[6] = self.blocks[2], self.blocks[6], self.blocks[0], self.blocks[4]
-        self.blocks[0].rotate(2)
-        self.blocks[2].rotate(1)
-        self.blocks[4].rotate(1)
-        self.blocks[6].rotate(2)
+    @staticmethod
+    def l(cube_str):
+        cube = Cube.from_string(cube_str)
+        cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[2], cube.blocks[6], cube.blocks[0], cube.blocks[4]
+        cube.blocks[0].rotate(2)
+        cube.blocks[2].rotate(1)
+        cube.blocks[4].rotate(1)
+        cube.blocks[6].rotate(2)
+        return str(cube)
 
-    def lr(self):
-        self.blocks[0], self.blocks[2], self.blocks[4], self.blocks[6] = self.blocks[4], self.blocks[0], self.blocks[6], self.blocks[2]
-        self.blocks[0].rotate(2)
-        self.blocks[2].rotate(1)
-        self.blocks[4].rotate(1)
-        self.blocks[6].rotate(2)
+    @staticmethod
+    def lr(cube_str):
+        cube = Cube.from_string(cube_str)
+        cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[4], cube.blocks[0], cube.blocks[6], cube.blocks[2]
+        cube.blocks[0].rotate(2)
+        cube.blocks[2].rotate(1)
+        cube.blocks[4].rotate(1)
+        cube.blocks[6].rotate(2)
+        return str(cube)
 
-    def b(self):
-        self.blocks[0], self.blocks[1], self.blocks[4], self.blocks[5] = self.blocks[4], self.blocks[0], self.blocks[5], self.blocks[1]
-        self.blocks[0].rotate(1)
-        self.blocks[1].rotate(2)
-        self.blocks[4].rotate(2)
-        self.blocks[5].rotate(1)
+    @staticmethod
+    def b(cube_str):
+        cube = Cube.from_string(cube_str)
+        cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[4], cube.blocks[0], cube.blocks[5], cube.blocks[1]
+        cube.blocks[0].rotate(1)
+        cube.blocks[1].rotate(2)
+        cube.blocks[4].rotate(2)
+        cube.blocks[5].rotate(1)
+        return str(cube)
 
-    def br(self):
-        self.blocks[0], self.blocks[1], self.blocks[4], self.blocks[5] = self.blocks[1], self.blocks[5], self.blocks[0], self.blocks[4]
-        self.blocks[0].rotate(1)
-        self.blocks[1].rotate(2)
-        self.blocks[4].rotate(2)
-        self.blocks[5].rotate(1)
+    @staticmethod
+    def br(cube_str):
+        cube = Cube.from_string(cube_str)
+        cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[1], cube.blocks[5], cube.blocks[0], cube.blocks[4]
+        cube.blocks[0].rotate(1)
+        cube.blocks[1].rotate(2)
+        cube.blocks[4].rotate(2)
+        cube.blocks[5].rotate(1)
+        return str(cube)
 
     @classmethod
     def from_string(cls, cube_str):
@@ -124,17 +142,58 @@ class Cube:
         cube = cls(blocks=blocks)
         return cube
 
+    @staticmethod
+    def get_moves():
+        return (Cube.d, Cube.dr, Cube.l, Cube.lr, Cube.b, Cube.br)
+
+
+class States:
+    def __init__(self, values):
+        self.states = OrderedDict(values)
+        self.index = 0
+
+    def append(self, key, value):
+        self.states[key] = value
+
+    def has(self, key):
+        return key in self.states
+
+    def get_next(self):
+        state = list(self.states.items())[self.index]
+        self.index += 1
+        return state
+
+    def get_value(self, key):
+        return self.states[key]
+
+
+def solve(cube):
+    solved_cube = Cube.from_string(SOLVED)
+
+    forwards = States({str(cube): 0})
+    backwards = States({str(solved_cube): 0})
+    states = ((forwards, backwards), (backwards, forwards))
+    while True:
+        for my_states, other_states in states:
+            state, depth = my_states.get_next()
+            if other_states.has(state):
+                return depth + other_states.get_value(state)
+            for move in Cube.get_moves():
+                new_state = move(state)
+                if my_states.has(new_state):
+                    continue
+                else:
+                    my_states.append(new_state, depth + 1)
+
 
 if __name__ == '__main__':
-    cube = Cube(i='''OO
-OO
-RR GG BB WW
-RR GG BB WW
-YY
-YY
+    cube = Cube(i='''RO
+WO
+YR GG BO WW
+YW RR GO BB
+GY
+BY
 '''.split('\n'))
-    cube.b()
-    print(cube)
+    print(solve(cube))
 
-    solved_cube = Cube.from_string(SOLVED)
-    print(solved_cube)
+
