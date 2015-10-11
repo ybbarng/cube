@@ -23,10 +23,13 @@ class Block:
 
 
 class Cube:
-    blocks = []
-    solved = []
 
-    def __init__(self, i):
+    def __init__(self, value='', i=None):
+        self.value = value
+        if i is None:
+            return
+        blocks = []
+        solved = []
         color_orders = defaultdict(int)
         up = [i[0][0], i[0][1], i[1][0], i[1][1]]
         front = [i[2][0], i[2][1], i[3][0], i[3][1]]
@@ -38,29 +41,38 @@ class Cube:
         color_orders[front[1]] = 2
         color_orders[right[0]] = 1
 
-        self.blocks.append(Block(color_orders, down[2], left[2], back[3]))
-        self.blocks.append(Block(color_orders, down[3], back[2], right[3]))
-        self.blocks.append(Block(color_orders, down[0], front[2], left[3]))
-        self.blocks.append(Block(color_orders, down[1], right[2], front[3]))
-        self.blocks.append(Block(color_orders, up[0], back[1], left[0]))
-        self.blocks.append(Block(color_orders, up[1], right[1], back[0]))
-        self.blocks.append(Block(color_orders, up[2], left[1], front[0]))
-        self.blocks.append(Block(color_orders, up[3], front[1], right[0]))
-        self.solved = sorted(self.blocks, key=lambda x: x.index)
+        blocks.append(Block(color_orders, down[2], left[2], back[3]))
+        blocks.append(Block(color_orders, down[3], back[2], right[3]))
+        blocks.append(Block(color_orders, down[0], front[2], left[3]))
+        blocks.append(Block(color_orders, down[1], right[2], front[3]))
+        blocks.append(Block(color_orders, up[0], back[1], left[0]))
+        blocks.append(Block(color_orders, up[1], right[1], back[0]))
+        blocks.append(Block(color_orders, up[2], left[1], front[0]))
+        blocks.append(Block(color_orders, up[3], front[1], right[0]))
+        solved = sorted(blocks, key=lambda x: x.index)
         bottom_colors = Counter()
         for i in range(0, 4):
-            bottom_colors.update(self.solved[i].colors)
+            bottom_colors.update(solved[i].colors)
         bottom_color = bottom_colors.most_common(1)[0][0]
         top_color = up[3]
-        for block in self.blocks:
+        self.value = ''
+        for block in blocks:
             block.set_orientation(top_color, bottom_color)
+            self.value += str(block)
+
+    def __unicode__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
 
 
 if __name__ == '__main__':
-    Cube('''OO
+    cube = Cube(i='''OO
 RO
 WR GG BB WO
 RR GG BB WW
 YY
 YY
 '''.split('\n'))
+    print(cube)
