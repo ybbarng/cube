@@ -193,9 +193,9 @@ if __name__ == '__main__':
         inputs = [input() for j in range(0, 6)]
         old = time()
         cube = Cube(i=inputs)
-        solve(cube)
+        print(solve(cube))
         now = time()
-        print(now - old)
+        print('소요시간 : ' + str(now - old))
         if i + 1 != number_of_inputs:
             input()
 
