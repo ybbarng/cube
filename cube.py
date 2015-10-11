@@ -1,5 +1,4 @@
 from collections import defaultdict, Counter
-from time import time
 
 
 SOLVED = '0010203040506070'
@@ -200,16 +199,11 @@ def solve(cube):
                     my_states.append(new_state, depth + 1)
 
 
-if __name__ == '__main__':
-    number_of_inputs = int(input())
-    for i in range(0, number_of_inputs):
-        inputs = [input() for j in range(0, 6)]
-        old = time()
-        cube = Cube(i=inputs)
-        print(solve(cube))
-        now = time()
-        print('소요시간 : ' + str(now - old))
-        if i + 1 != number_of_inputs:
-            input()
-
+number_of_inputs = int(input())
+for i in range(0, number_of_inputs):
+    inputs = [input() for j in range(0, 6)]
+    cube = Cube(i=inputs)
+    print(solve(cube))
+    if i + 1 != number_of_inputs:
+        input()
 
