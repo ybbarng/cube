@@ -1,4 +1,4 @@
-from collections import defaultdict, Counter, OrderedDict
+from collections import defaultdict, Counter
 from time import time
 
 
@@ -150,22 +150,25 @@ class Cube:
 
 class States:
     def __init__(self, values):
-        self.states = OrderedDict(values)
+        self.states = list(values.keys())
+        self.states_dict = values
         self.index = 0
 
     def append(self, key, value):
-        self.states[key] = value
+        self.states.append(key)
+        if key not in self.states_dict:
+            self.states_dict[key] = value
 
     def has(self, key):
-        return key in self.states
+        return key in self.states_dict
 
     def get_next(self):
-        state = list(self.states.items())[self.index]
+        state = self.states[self.index]
         self.index += 1
-        return state
+        return state, self.states_dict[state]
 
     def get_value(self, key):
-        return self.states[key]
+        return self.states_dict[key]
 
 
 def solve(cube):
