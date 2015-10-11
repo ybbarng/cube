@@ -1,0 +1,14 @@
+venv
+venv2
+*.log
+*.pot
+*.pyc
+*.pid
+.*.swp
+.ropeproject/
+*.dat
+/static/
+azarproject/settings_prod.py
+kpiapp/management/client_secrets.json
+*.cfg
+.DS_Store
