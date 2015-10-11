@@ -143,7 +143,7 @@ class Cube:
         return cube
 
     @staticmethod
-    def get_moves():
+    def get_turns():
         return (Cube.d, Cube.dr, Cube.l, Cube.lr, Cube.b, Cube.br)
 
 
@@ -186,8 +186,8 @@ def solve(cube):
                     return 14
             if other_states.has(state):
                 return depth + other_states.get_value(state)
-            for move in Cube.get_moves():
-                new_state = move(state)
+            for turn in Cube.get_turns():
+                new_state = turn(state)
                 if my_states.has(new_state):
                     continue
                 elif other_states.has(new_state):
