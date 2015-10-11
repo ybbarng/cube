@@ -1,4 +1,5 @@
 from collections import defaultdict, Counter, OrderedDict
+from time import time
 
 
 SOLVED = '0010203040506070'
@@ -190,9 +191,11 @@ if __name__ == '__main__':
     number_of_inputs = int(input())
     for i in range(0, number_of_inputs):
         inputs = [input() for j in range(0, 6)]
-        print(inputs)
+        old = time()
         cube = Cube(i=inputs)
-        print(solve(cube))
+        solve(cube)
+        now = time()
+        print(now - old)
         if i + 1 != number_of_inputs:
             input()
 
