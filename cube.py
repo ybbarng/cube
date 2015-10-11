@@ -2,7 +2,7 @@ from collections import defaultdict, Counter
 from time import time
 
 
-SOLVED = '0010203040506070'
+SOLVED = (0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0)
 
 
 class Block:
@@ -88,67 +88,74 @@ class Cube:
 
     @staticmethod
     def d(cube_str):
-        cube = Cube.from_string(cube_str)
+        cube = Cube.from_tuple(cube_str)
         cube.blocks[0:4] = cube.blocks[1], cube.blocks[3], cube.blocks[0], cube.blocks[2]
-        return str(cube)
+        return cube.to_tuple()
 
     @staticmethod
     def dr(cube_str):
-        cube = Cube.from_string(cube_str)
+        cube = Cube.from_tuple(cube_str)
         cube.blocks[0:4] = cube.blocks[2], cube.blocks[0], cube.blocks[3], cube.blocks[1]
-        return str(cube)
+        return cube.to_tuple()
 
     @staticmethod
     def l(cube_str):
-        cube = Cube.from_string(cube_str)
+        cube = Cube.from_tuple(cube_str)
         cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[2], cube.blocks[6], cube.blocks[0], cube.blocks[4]
         Cube.rotate(cube.blocks[0], 2)
         Cube.rotate(cube.blocks[2], 1)
         Cube.rotate(cube.blocks[4], 1)
         Cube.rotate(cube.blocks[6], 2)
-        return str(cube)
+        return cube.to_tuple()
 
     @staticmethod
     def lr(cube_str):
-        cube = Cube.from_string(cube_str)
+        cube = Cube.from_tuple(cube_str)
         cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[4], cube.blocks[0], cube.blocks[6], cube.blocks[2]
         Cube.rotate(cube.blocks[0], 2)
         Cube.rotate(cube.blocks[2], 1)
         Cube.rotate(cube.blocks[4], 1)
         Cube.rotate(cube.blocks[6], 2)
-        return str(cube)
+        return cube.to_tuple()
 
     @staticmethod
     def b(cube_str):
-        cube = Cube.from_string(cube_str)
+        cube = Cube.from_tuple(cube_str)
         cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[4], cube.blocks[0], cube.blocks[5], cube.blocks[1]
         Cube.rotate(cube.blocks[0], 1)
         Cube.rotate(cube.blocks[1], 2)
         Cube.rotate(cube.blocks[4], 2)
         Cube.rotate(cube.blocks[5], 1)
-        return str(cube)
+        return cube.to_tuple()
 
     @staticmethod
     def br(cube_str):
-        cube = Cube.from_string(cube_str)
+        cube = Cube.from_tuple(cube_str)
         cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[1], cube.blocks[5], cube.blocks[0], cube.blocks[4]
         Cube.rotate(cube.blocks[0], 1)
         Cube.rotate(cube.blocks[1], 2)
         Cube.rotate(cube.blocks[4], 2)
         Cube.rotate(cube.blocks[5], 1)
-        return str(cube)
+        return cube.to_tuple()
 
     @staticmethod
     def rotate(block, rotation):
         block[1] = (block[1] + rotation) % 3
 
     @classmethod
-    def from_string(cls, cube_str):
+    def from_tuple(cls, cube_list):
         blocks = []
         for i in range(0, 8):
-            blocks.append([int(cube_str[i * 2]), int(cube_str[i * 2 + 1])])
+            blocks.append([cube_list[i * 2], cube_list[i * 2 + 1]])
         cube = cls(blocks=blocks)
         return cube
+
+    def to_tuple(self):
+        value = []
+        for block in self.blocks:
+            for i in block:
+                value.append(i)
+        return tuple(value)
 
     @staticmethod
     def get_turns():
@@ -181,10 +188,10 @@ class States:
 
 
 def solve(cube):
-    solved_cube = Cube.from_string(SOLVED)
+    solved_cube = Cube.from_tuple(SOLVED)
 
-    forwards = States({str(cube): 0})
-    backwards = States({str(solved_cube): 0})
+    forwards = States({cube.to_tuple(): 0})
+    backwards = States({solved_cube.to_tuple(): 0})
     states = ((forwards, backwards), (backwards, forwards))
     while True:
         for my_states, other_states in states:
