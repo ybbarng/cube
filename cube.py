@@ -60,39 +60,39 @@ def get_cube(i):
     return tuple(ret)
 
 
-def turn_base(cube_tuple, moves, rotations):
+def turn_base(cube, moves, rotations):
     new_state = []
     for move in moves:
-        new_state.append(cube_tuple[move * 2])
-        new_state.append(cube_tuple[move * 2 + 1])
+        new_state.append(cube[move * 2])
+        new_state.append(cube[move * 2 + 1])
 
     for i, rotation in enumerate(rotations):
         rotate(new_state, i * 2 + 1, rotation)
     return tuple(new_state)
 
 
-def d(cube_tuple):
-    return turn_base(cube_tuple, [1, 3, 0, 2, 4, 5, 6, 7], [0, 0, 0, 0, 0, 0, 0, 0])
+def d(cube):
+    return turn_base(cube, [1, 3, 0, 2, 4, 5, 6, 7], [0, 0, 0, 0, 0, 0, 0, 0])
 
 
-def dr(cube_tuple):
-    return turn_base(cube_tuple, [2, 0, 3, 1, 4, 5, 6, 7], [0, 0, 0, 0, 0, 0, 0, 0])
+def dr(cube):
+    return turn_base(cube, [2, 0, 3, 1, 4, 5, 6, 7], [0, 0, 0, 0, 0, 0, 0, 0])
 
 
-def l(cube_tuple):
-    return turn_base(cube_tuple, [2, 1, 6, 3, 0, 5, 4, 7], [2, 0, 1, 0, 1, 0, 2, 0])
+def l(cube):
+    return turn_base(cube, [2, 1, 6, 3, 0, 5, 4, 7], [2, 0, 1, 0, 1, 0, 2, 0])
 
 
-def lr(cube_tuple):
-    return turn_base(cube_tuple, [4, 1, 0, 3, 6, 5, 2, 7], [2, 0, 1, 0, 1, 0, 2, 0])
+def lr(cube):
+    return turn_base(cube, [4, 1, 0, 3, 6, 5, 2, 7], [2, 0, 1, 0, 1, 0, 2, 0])
 
 
-def b(cube_tuple):
-    return turn_base(cube_tuple, [4, 0, 2, 3, 5, 1, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
+def b(cube):
+    return turn_base(cube, [4, 0, 2, 3, 5, 1, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
 
 
-def br(cube_tuple):
-    return turn_base(cube_tuple, [1, 5, 2, 3, 0, 4, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
+def br(cube):
+    return turn_base(cube, [1, 5, 2, 3, 0, 4, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
 
 
 def rotate(state, i, rotation):
