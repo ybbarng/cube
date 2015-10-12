@@ -142,10 +142,8 @@ class States:
 
 
 def solve(cube):
-    solved_cube = Cube.from_tuple(SOLVED)
-
     forwards = States({cube.to_tuple(): 0})
-    backwards = States({solved_cube.to_tuple(): 0})
+    backwards = States({SOLVED: 0})
     states = ((forwards, backwards), (backwards, forwards))
     while True:
         for my_states, other_states in states:
