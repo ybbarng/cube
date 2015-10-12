@@ -64,56 +64,36 @@ class Cube:
             self.blocks.append([block.index, block.orientation])
 
     @staticmethod
-    def d(cube_tuple):
+    def turn_base(cube_tuple, moves, rotations):
         cube = Cube.from_tuple(cube_tuple)
-        cube.blocks[0:4] = cube.blocks[1], cube.blocks[3], cube.blocks[0], cube.blocks[2]
+        cube.blocks = [cube.blocks[move] for move in moves]
+        for i, rotation in enumerate(rotations):
+            Cube.rotate(cube.blocks[i], rotation)
         return cube.to_tuple()
+
+    @staticmethod
+    def d(cube_tuple):
+        return Cube.turn_base(cube_tuple, [1, 3, 0, 2, 4, 5, 6, 7], [0, 0, 0, 0, 0, 0, 0, 0])
 
     @staticmethod
     def dr(cube_tuple):
-        cube = Cube.from_tuple(cube_tuple)
-        cube.blocks[0:4] = cube.blocks[2], cube.blocks[0], cube.blocks[3], cube.blocks[1]
-        return cube.to_tuple()
+        return Cube.turn_base(cube_tuple, [2, 0, 3, 1, 4, 5, 6, 7], [0, 0, 0, 0, 0, 0, 0, 0])
 
     @staticmethod
     def l(cube_tuple):
-        cube = Cube.from_tuple(cube_tuple)
-        cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[2], cube.blocks[6], cube.blocks[0], cube.blocks[4]
-        Cube.rotate(cube.blocks[0], 2)
-        Cube.rotate(cube.blocks[2], 1)
-        Cube.rotate(cube.blocks[4], 1)
-        Cube.rotate(cube.blocks[6], 2)
-        return cube.to_tuple()
+        return Cube.turn_base(cube_tuple, [2, 1, 6, 3, 0, 5, 4, 7], [2, 0, 1, 0, 1, 0, 2, 0])
 
     @staticmethod
     def lr(cube_tuple):
-        cube = Cube.from_tuple(cube_tuple)
-        cube.blocks[0], cube.blocks[2], cube.blocks[4], cube.blocks[6] = cube.blocks[4], cube.blocks[0], cube.blocks[6], cube.blocks[2]
-        Cube.rotate(cube.blocks[0], 2)
-        Cube.rotate(cube.blocks[2], 1)
-        Cube.rotate(cube.blocks[4], 1)
-        Cube.rotate(cube.blocks[6], 2)
-        return cube.to_tuple()
+        return Cube.turn_base(cube_tuple, [4, 1, 0, 3, 6, 5, 2, 7], [2, 0, 1, 0, 1, 0, 2, 0])
 
     @staticmethod
     def b(cube_tuple):
-        cube = Cube.from_tuple(cube_tuple)
-        cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[4], cube.blocks[0], cube.blocks[5], cube.blocks[1]
-        Cube.rotate(cube.blocks[0], 1)
-        Cube.rotate(cube.blocks[1], 2)
-        Cube.rotate(cube.blocks[4], 2)
-        Cube.rotate(cube.blocks[5], 1)
-        return cube.to_tuple()
+        return Cube.turn_base(cube_tuple, [4, 0, 2, 3, 5, 1, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
 
     @staticmethod
     def br(cube_tuple):
-        cube = Cube.from_tuple(cube_tuple)
-        cube.blocks[0], cube.blocks[1], cube.blocks[4], cube.blocks[5] = cube.blocks[1], cube.blocks[5], cube.blocks[0], cube.blocks[4]
-        Cube.rotate(cube.blocks[0], 1)
-        Cube.rotate(cube.blocks[1], 2)
-        Cube.rotate(cube.blocks[4], 2)
-        Cube.rotate(cube.blocks[5], 1)
-        return cube.to_tuple()
+        return Cube.turn_base(cube_tuple, [1, 5, 2, 3, 0, 4, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
 
     @staticmethod
     def rotate(block, rotation):
