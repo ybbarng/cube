@@ -65,11 +65,14 @@ class Cube:
 
     @staticmethod
     def turn_base(cube_tuple, moves, rotations):
-        cube = Cube.from_tuple(cube_tuple)
-        cube.blocks = [cube.blocks[move] for move in moves]
+        new_state = []
+        for move in moves:
+            new_state.append(cube_tuple[move * 2])
+            new_state.append(cube_tuple[move * 2 + 1])
+
         for i, rotation in enumerate(rotations):
-            Cube.rotate(cube.blocks[i], rotation)
-        return cube.to_tuple()
+            Cube.rotate(new_state, i * 2 + 1, rotation)
+        return tuple(new_state)
 
     @staticmethod
     def d(cube_tuple):
@@ -96,8 +99,8 @@ class Cube:
         return Cube.turn_base(cube_tuple, [1, 5, 2, 3, 0, 4, 6, 7], [1, 2, 0, 0, 2, 1, 0, 0])
 
     @staticmethod
-    def rotate(block, rotation):
-        block[1] = (block[1] + rotation) % 3
+    def rotate(state, i, rotation):
+        state[i] = (state[i] + rotation) % 3
 
     @classmethod
     def from_tuple(cls, cube_list):
